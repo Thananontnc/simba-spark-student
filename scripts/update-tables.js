@@ -18,6 +18,12 @@ async function main() {
     ALTER TABLE users ADD COLUMN IF NOT EXISTS department TEXT;
     ALTER TABLE users ADD COLUMN IF NOT EXISTS faculty TEXT;
     ALTER TABLE users ADD COLUMN IF NOT EXISTS credits INT;
+    
+    ALTER TABLE sections ADD COLUMN IF NOT EXISTS start_time TIME;
+    ALTER TABLE sections ADD COLUMN IF NOT EXISTS end_time TIME;
+    
+    UPDATE sections SET start_time = '09:00:00', end_time = '10:30:00' WHERE id = 1 AND start_time IS NULL;
+    UPDATE sections SET start_time = '12:00:00', end_time = '13:30:00' WHERE id = 2 AND start_time IS NULL;
   `);
 
   console.log('Database tables successfully updated! No tables were dropped, and no data was deleted.');

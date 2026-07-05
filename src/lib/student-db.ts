@@ -1,5 +1,6 @@
 import sql from './db';
 import type { StudentDashboardData } from './types';
+import { weekdaysInRange } from './date-utils';
 
 export async function getStudentDashboardData(studentEmail: string): Promise<StudentDashboardData | null> {
   // 1. Fetch student user profile details using SELECT * to avoid "column not found" errors
@@ -71,7 +72,9 @@ export async function getStudentDashboardData(studentEmail: string): Promise<Stu
       s.timeframe_id AS "timeframeId",
       t.label AS "timeframeLabel",
       TO_CHAR(t.start_date, 'YYYY-MM-DD') AS "timeframeStartDate",
-      TO_CHAR(t.end_date, 'YYYY-MM-DD') AS "timeframeEndDate"
+      TO_CHAR(t.end_date, 'YYYY-MM-DD') AS "timeframeEndDate",
+      TO_CHAR(s.start_time, 'HH24:MI') AS "startTime",
+      TO_CHAR(s.end_time, 'HH24:MI') AS "endTime"
     FROM enrollments e
     JOIN sections s ON e.section_id = s.id
     JOIN courses c ON s.course_id = c.id
@@ -82,19 +85,22 @@ export async function getStudentDashboardData(studentEmail: string): Promise<Stu
 
   const enrolledCourses = [];
   for (const row of enrolledSections as any[]) {
-    // 4. Fetch bookings for this section
-    const bookingRows = await sql`
-      SELECT 
-        id, 
-        section_id AS "sectionId", 
-        TO_CHAR(date, 'YYYY-MM-DD') AS "date", 
-        TO_CHAR(start_time, 'HH24:MI') AS "startTime", 
-        TO_CHAR(end_time, 'HH24:MI') AS "endTime", 
-        room 
-      FROM bookings 
-      WHERE section_id = ${row.sectionId}
-      ORDER BY date ASC, start_time ASC
-    `;
+    // Option 2: Generate the 10 block daily bookings dynamically in memory 
+    // using the start/end date of the timeframe block and the start/end time of the section.
+    // If the database has no start_time or end_time, we default to standard class hours (e.g. 09:00 - 10:30).
+    const startT = row.startTime || '09:00';
+    const endT = row.endTime || '10:30';
+    const room = row.room || '-';
+
+    const weekdays = weekdaysInRange(row.timeframeStartDate, row.timeframeEndDate);
+    const bookingRows = weekdays.map((date, index) => ({
+      id: row.sectionId * 1000 + index,
+      sectionId: row.sectionId,
+      date,
+      startTime: startT,
+      endTime: endT,
+      room: room,
+    }));
 
     enrolledCourses.push({
       course: {
@@ -118,14 +124,7 @@ export async function getStudentDashboardData(studentEmail: string): Promise<Stu
         startDate: row.timeframeStartDate,
         endDate: row.timeframeEndDate,
       },
-      bookings: bookingRows.map((b: any) => ({
-        id: b.id,
-        sectionId: b.sectionId,
-        date: b.date,
-        startTime: b.startTime,
-        endTime: b.endTime,
-        room: b.room,
-      })),
+      bookings: bookingRows,
     });
   }
 

@@ -33,7 +33,9 @@ CREATE TABLE sections (
   section_number TEXT NOT NULL,
   instructor_id INT REFERENCES users(id),
   room TEXT,
-  timeframe_id INT REFERENCES timeframes(id)
+  timeframe_id INT REFERENCES timeframes(id),
+  start_time TIME,
+  end_time TIME
 );
 
 CREATE TABLE enrollments (
