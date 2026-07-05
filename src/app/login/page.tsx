@@ -60,10 +60,6 @@ export default function LoginPage() {
               {loading ? 'Signing in…' : 'Sign In'}
             </button>
           </form>
-          <p className="text-center text-xs mt-4" style={{ color: 'var(--tx-2)' }}>
-            First time?{' '}
-            <Link href="/register" className="font-medium" style={{ color: 'var(--accent)' }}>Create account</Link>
-          </p>
         </div>
       </div>
     </main>
