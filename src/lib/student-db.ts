@@ -2,14 +2,19 @@ import sql from './db';
 import type { StudentDashboardData } from './types';
 
 export async function getStudentDashboardData(studentEmail: string): Promise<StudentDashboardData | null> {
-  // 1. Fetch student user profile details from the original database columns
+  // 1. Fetch student user profile details directly from the database columns
   const studentRows = await sql`
     SELECT 
       id, 
       full_name AS "fullName", 
       email, 
       role, 
-      is_authorized AS "isAuthorized"
+      is_authorized AS "isAuthorized",
+      student_id AS "studentId",
+      gpa::float,
+      department,
+      faculty,
+      credits
     FROM users 
     WHERE email = ${studentEmail} AND role = 'student'
   `;
@@ -57,6 +62,7 @@ export async function getStudentDashboardData(studentEmail: string): Promise<Stu
       c.course_name AS "courseName",
       c.course_code AS "courseCode",
       c.credits,
+      c.faculty,
       s.timeframe_id AS "timeframeId",
       t.label AS "timeframeLabel",
       TO_CHAR(t.start_date, 'YYYY-MM-DD') AS "timeframeStartDate",
@@ -91,6 +97,7 @@ export async function getStudentDashboardData(studentEmail: string): Promise<Stu
         courseName: row.courseName,
         courseCode: row.courseCode,
         credits: row.credits,
+        faculty: row.faculty,
       },
       section: {
         id: row.sectionId,
