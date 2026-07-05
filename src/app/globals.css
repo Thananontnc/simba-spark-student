@@ -218,13 +218,9 @@ html {
 .block-now .block-now__name { color: rgba(255,255,255,0.85) !important; }
 .block-now .block-now__time { color: rgba(255,255,255,0.7) !important; }
 
-/* Smooth expand/collapse for the in-card detail panel. We animate max-height
-   + opacity so the tap-to-reveal instructor/room info slides open. */
 .expand-panel {
   overflow: hidden;
-  transition: max-height 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.2s ease,
-              margin-top 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.15s ease;
 }
 
 /* View-switch fade: re-triggered on weekly/monthly toggle. */
