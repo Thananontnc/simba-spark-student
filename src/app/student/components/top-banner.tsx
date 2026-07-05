@@ -41,7 +41,7 @@ export default function TopBanner({ data }: Props) {
   }
 
   return (
-    <section className="relative overflow-hidden rounded-3xl h-44 sm:h-52 animate-fade-in bg-[#161513] border border-zinc-800/40 shadow-lg">
+    <section className="relative overflow-hidden rounded-3xl h-44 sm:h-52 animate-fade-in bg-[#161513] border border-[var(--border)] shadow-lg">
       {/* Landscape image layer — uses a campus-style stock photo from Unsplash
           source. Swap for a real AU campus photo later. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
