@@ -2,19 +2,10 @@ import sql from './db';
 import type { StudentDashboardData } from './types';
 
 export async function getStudentDashboardData(studentEmail: string): Promise<StudentDashboardData | null> {
-  // 1. Fetch student user profile details directly from the database columns
+  // 1. Fetch student user profile details using SELECT * to avoid "column not found" errors
+  // if your friend's database doesn't have the custom columns yet.
   const studentRows = await sql`
-    SELECT 
-      id, 
-      full_name AS "fullName", 
-      email, 
-      role, 
-      is_authorized AS "isAuthorized",
-      student_id AS "studentId",
-      gpa::float,
-      department,
-      faculty,
-      credits
+    SELECT * 
     FROM users 
     WHERE email = ${studentEmail} AND role = 'student'
   `;
@@ -22,7 +13,22 @@ export async function getStudentDashboardData(studentEmail: string): Promise<Stu
   if (studentRows.length === 0) {
     return null;
   }
-  const student = studentRows[0] as any;
+  const dbStudent = studentRows[0] as any;
+
+  // Map database columns safely. If they don't exist in the database, they will be
+  // undefined (which matches the optional User type and renders as '-' in the UI).
+  const student = {
+    id: dbStudent.id,
+    fullName: dbStudent.full_name,
+    email: dbStudent.email,
+    role: dbStudent.role,
+    isAuthorized: dbStudent.is_authorized,
+    studentId: dbStudent.student_id ?? undefined,
+    gpa: dbStudent.gpa != null ? parseFloat(dbStudent.gpa) : undefined,
+    department: dbStudent.department ?? undefined,
+    faculty: dbStudent.faculty ?? undefined,
+    credits: dbStudent.credits != null ? parseInt(dbStudent.credits) : undefined,
+  };
 
   // 2. Fetch current block timeframe (fallback to the first one if none is currently active)
   const currentBlockRows = await sql`
@@ -50,7 +56,7 @@ export async function getStudentDashboardData(studentEmail: string): Promise<Stu
     currentBlock = firstBlockRows[0] as any || null;
   }
 
-  // 3. Fetch enrolled sections with their associated courses and timeframes
+  // 3. Fetch enrolled sections with c.* to fetch faculty dynamically if it exists
   const enrolledSections = await sql`
     SELECT 
       e.section_id AS "sectionId",
@@ -62,7 +68,7 @@ export async function getStudentDashboardData(studentEmail: string): Promise<Stu
       c.course_name AS "courseName",
       c.course_code AS "courseCode",
       c.credits,
-      c.faculty,
+      c.*,
       s.timeframe_id AS "timeframeId",
       t.label AS "timeframeLabel",
       TO_CHAR(t.start_date, 'YYYY-MM-DD') AS "timeframeStartDate",
@@ -97,7 +103,7 @@ export async function getStudentDashboardData(studentEmail: string): Promise<Stu
         courseName: row.courseName,
         courseCode: row.courseCode,
         credits: row.credits,
-        faculty: row.faculty,
+        faculty: row.faculty ?? undefined, // Defaults to undefined if the column does not exist
       },
       section: {
         id: row.sectionId,
