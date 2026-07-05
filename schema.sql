@@ -5,14 +5,20 @@ CREATE TABLE users (
   password_hash TEXT NOT NULL,
   role TEXT NOT NULL CHECK (role IN ('admin','instructor','student')),
   is_authorized BOOLEAN DEFAULT FALSE,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  student_id TEXT,
+  gpa NUMERIC(3,2),
+  department TEXT,
+  faculty TEXT,
+  credits INT
 );
 
 CREATE TABLE courses (
   id SERIAL PRIMARY KEY,
   course_name TEXT NOT NULL,
   course_code TEXT UNIQUE NOT NULL,
-  credits INT
+  credits INT,
+  faculty TEXT
 );
 
 CREATE TABLE timeframes (

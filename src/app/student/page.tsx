@@ -2,15 +2,26 @@ import TopBanner from './components/top-banner';
 import TimetableGrid from './components/timetable-grid';
 import CourseDirectory from './components/course-directory';
 import RightPanel from './components/right-panel';
-import { mockDashboardData } from '@/lib/mock-data';
+import { auth } from '@/auth';
+import { getStudentDashboardData } from '@/lib/student-db';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic'; // dashboard shows live-ish data, never build-time frozen
 
-export default function StudentPage() {
-  // MOCK PHASE: read straight from the mock dataset. When real data is wired
-  // in, replace this single line with the DB query that builds the same
-  // StudentDashboardData shape (see lib/types.ts).
-  const data = mockDashboardData;
+export default async function StudentPage() {
+  const session = await auth();
+  if (!session?.user?.email) {
+    redirect('/login');
+  }
+
+  const data = await getStudentDashboardData(session.user.email);
+  if (!data) {
+    return (
+      <div className="p-6 text-center">
+        <p className="text-red-500 font-bold">Error loading student dashboard data.</p>
+      </div>
+    );
+  }
 
   return (
     // 3-column dashboard inspired by the reference layout (but scoped to

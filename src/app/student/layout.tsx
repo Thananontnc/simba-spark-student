@@ -1,10 +1,23 @@
-import { signOut } from '@/auth';
+import { auth, signOut } from '@/auth';
 import { ThemeToggle } from '@/components/theme-toggle';
 import StudentSidebar from './sidebar';
-import { mockDashboardData } from '@/lib/mock-data';
+import { getStudentDashboardData } from '@/lib/student-db';
+import { redirect } from 'next/navigation';
 
-export default function StudentLayout({ children }: { children: React.ReactNode }) {
-  const data = mockDashboardData;
+export default async function StudentLayout({ children }: { children: React.ReactNode }) {
+  const session = await auth();
+  if (!session?.user?.email) {
+    redirect('/login');
+  }
+
+  const data = await getStudentDashboardData(session.user.email);
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p>Error: Student profile not found in database.</p>
+      </div>
+    );
+  }
 
   async function handleSignOut() {
     'use server';
