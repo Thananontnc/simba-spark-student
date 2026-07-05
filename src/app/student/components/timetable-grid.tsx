@@ -379,7 +379,7 @@ function TimetableCard({
     <div
       onClick={onToggle}
       className={[
-        'rounded-xl p-3.5 cursor-pointer transition-[opacity,background-color,border-color,transform,box-shadow] duration-300 ease-in-out select-none flex flex-col justify-between',
+        'rounded-xl p-3.5 cursor-pointer transition duration-300 ease-in-out select-none flex flex-col justify-between',
         'hover:-translate-y-1',
         'border',
         inSession || isOverride
