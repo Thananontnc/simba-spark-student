@@ -379,7 +379,7 @@ function TimetableCard({
     <div
       onClick={onToggle}
       className={[
-        'rounded-xl p-3.5 cursor-pointer transition-all duration-300 ease-in-out select-none flex flex-col justify-between',
+        'rounded-xl p-3.5 cursor-pointer transition-[opacity,background-color,border-color,transform,box-shadow] duration-300 ease-in-out select-none flex flex-col justify-between',
         'hover:-translate-y-1',
         'border',
         inSession || isOverride
@@ -473,7 +473,7 @@ function RowFragment({ children }: { children: React.ReactNode }) {
 function WeekendCell({ gridCol, gridRow, isDimmed }: { gridCol: number; gridRow: number; isDimmed: boolean }) {
   return (
     <div
-      className="rounded-xl flex items-center justify-center transition-all duration-300 ease-in-out"
+      className="rounded-xl flex items-center justify-center transition-[opacity,filter] duration-300 ease-in-out"
       style={{
         background: 'var(--empty-cell-bg)',
         border: '1px solid var(--empty-cell-border)',
@@ -494,7 +494,7 @@ function WeekendCell({ gridCol, gridRow, isDimmed }: { gridCol: number; gridRow:
 function EmptyCell({ isToday, gridCol, gridRow, isDimmed }: { isToday: boolean; gridCol: number; gridRow: number; isDimmed: boolean }) {
   return (
     <div
-      className="rounded-xl transition-all duration-300 ease-in-out cursor-pointer flex items-center justify-center group relative min-h-[52px] hover:bg-orange-500/[0.04] dark:hover:bg-orange-500/[0.03] hover:border-[#FF6B00]/30 dark:hover:border-[#FF6B00]/20"
+      className="rounded-xl transition-[opacity,filter,background-color,border-color] duration-300 ease-in-out cursor-pointer flex items-center justify-center group relative min-h-[52px] hover:bg-orange-500/[0.04] dark:hover:bg-orange-500/[0.03] hover:border-[#FF6B00]/30 dark:hover:border-[#FF6B00]/20"
       style={{
         borderWidth: '1px',
         borderStyle: 'solid',
