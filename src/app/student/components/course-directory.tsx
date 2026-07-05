@@ -28,7 +28,6 @@ export default function CourseDirectory({ data }: Props) {
       return (
         course.courseName.toLowerCase().includes(q) ||
         course.courseCode.toLowerCase().includes(q) ||
-        (course.faculty?.toLowerCase() || '').includes(q) ||
         section.sectionNumber.toLowerCase().includes(q)
       );
     });
@@ -112,7 +111,7 @@ function Header({
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search name, code, faculty…"
+          placeholder="Search name or code…"
           className="flex-1 text-sm outline-none bg-transparent min-w-0"
           style={{ color: 'var(--tx)' }}
         />
@@ -159,14 +158,6 @@ function CourseCard({
             >
               {c.courseCode}
             </span>
-            {c.faculty && (
-              <span
-                className="inline-block px-2 py-0.5 rounded-md text-[10px] font-medium"
-                style={{ background: 'var(--subtle)', color: 'var(--tx-2)', border: '1px solid var(--border)' }}
-              >
-                {c.faculty}
-              </span>
-            )}
           </div>
           <h3 className="text-sm font-semibold mt-1.5 truncate" style={{ color: 'var(--tx)' }}>
             {c.courseName}

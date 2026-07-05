@@ -48,8 +48,6 @@ export interface Course {
   courseName: string;
   courseCode: string;
   credits: number;
-  /** Owning faculty / department — drives the "multi-faculty course views". */
-  faculty?: string;
 }
 
 /**

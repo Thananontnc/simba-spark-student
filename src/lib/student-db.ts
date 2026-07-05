@@ -56,7 +56,7 @@ export async function getStudentDashboardData(studentEmail: string): Promise<Stu
     currentBlock = firstBlockRows[0] as any || null;
   }
 
-  // 3. Fetch enrolled sections with c.* to fetch faculty dynamically if it exists
+  // 3. Fetch enrolled sections with their associated courses and timeframes
   const enrolledSections = await sql`
     SELECT 
       e.section_id AS "sectionId",
@@ -68,7 +68,6 @@ export async function getStudentDashboardData(studentEmail: string): Promise<Stu
       c.course_name AS "courseName",
       c.course_code AS "courseCode",
       c.credits,
-      c.*,
       s.timeframe_id AS "timeframeId",
       t.label AS "timeframeLabel",
       TO_CHAR(t.start_date, 'YYYY-MM-DD') AS "timeframeStartDate",
@@ -103,7 +102,6 @@ export async function getStudentDashboardData(studentEmail: string): Promise<Stu
         courseName: row.courseName,
         courseCode: row.courseCode,
         credits: row.credits,
-        faculty: row.faculty ?? undefined, // Defaults to undefined if the column does not exist
       },
       section: {
         id: row.sectionId,

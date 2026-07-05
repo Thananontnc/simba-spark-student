@@ -17,8 +17,7 @@ CREATE TABLE courses (
   id SERIAL PRIMARY KEY,
   course_name TEXT NOT NULL,
   course_code TEXT UNIQUE NOT NULL,
-  credits INT,
-  faculty TEXT
+  credits INT
 );
 
 CREATE TABLE timeframes (

@@ -18,8 +18,6 @@ async function main() {
     ALTER TABLE users ADD COLUMN IF NOT EXISTS department TEXT;
     ALTER TABLE users ADD COLUMN IF NOT EXISTS faculty TEXT;
     ALTER TABLE users ADD COLUMN IF NOT EXISTS credits INT;
-    
-    ALTER TABLE courses ADD COLUMN IF NOT EXISTS faculty TEXT;
   `);
 
   console.log('Database tables successfully updated! No tables were dropped, and no data was deleted.');
