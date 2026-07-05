@@ -95,19 +95,25 @@ export default function StudentSidebar({ data, signOutAction }: Props) {
         </div>
 
         {/* Row 2: Rounded info box (Shield + Department/Faculty) */}
-        <div className="w-full bg-[#f3f4f6] dark:bg-zinc-800/60 rounded-xl p-3.5 flex items-center gap-3 mt-4">
-          <svg className="w-8 h-8 text-zinc-300 dark:text-zinc-600 shrink-0" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z" />
-          </svg>
-          <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-bold text-zinc-700 dark:text-zinc-200 uppercase tracking-wide truncate">
-              {student.department}
-            </p>
-            <p className="text-[8px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider truncate mt-1">
-              {student.faculty ?? 'ENGINEERING, SCIENCE AND TECHNOLOGY'}
-            </p>
+        {(student.department || student.faculty) && (
+          <div className="w-full bg-[#f3f4f6] dark:bg-zinc-800/60 rounded-xl p-3.5 flex items-center gap-3 mt-4">
+            <svg className="w-8 h-8 text-zinc-300 dark:text-zinc-600 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z" />
+            </svg>
+            <div className="min-w-0 flex-1">
+              {student.department && (
+                <p className="text-[10px] font-bold text-zinc-700 dark:text-zinc-200 uppercase tracking-wide truncate">
+                  {student.department}
+                </p>
+              )}
+              {student.faculty && (
+                <p className="text-[8px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider truncate mt-1">
+                  {student.faculty}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Row 3: 3-column Stats */}
         <div className="grid grid-cols-3 gap-2 w-full mt-5 text-center">
