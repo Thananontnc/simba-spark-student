@@ -17,18 +17,7 @@ export async function getStudentDashboardData(studentEmail: string): Promise<Stu
   if (studentRows.length === 0) {
     return null;
   }
-  const dbStudent = studentRows[0] as any;
-
-  // Enrich the missing student details in-memory so they render on the UI
-  // without modifying the shared PostgreSQL users table structure.
-  const student = {
-    ...dbStudent,
-    studentId: '6710990',
-    gpa: 3.61,
-    department: 'COMPUTER SCIENCE',
-    faculty: 'ENGINEERING, SCIENCE AND TECHNOLOGY',
-    credits: 68,
-  };
+  const student = studentRows[0] as any;
 
   // 2. Fetch current block timeframe (fallback to the first one if none is currently active)
   const currentBlockRows = await sql`
@@ -96,21 +85,12 @@ export async function getStudentDashboardData(studentEmail: string): Promise<Stu
       ORDER BY date ASC, start_time ASC
     `;
 
-    // Map course faculty in-memory to match Course type requirements
-    let faculty = 'General Education';
-    if (row.courseCode === 'CS101') {
-      faculty = 'Computing & IT';
-    } else if (row.courseCode === 'MA101') {
-      faculty = 'Science & Mathematics';
-    }
-
     enrolledCourses.push({
       course: {
         id: row.courseId,
         courseName: row.courseName,
         courseCode: row.courseCode,
         credits: row.credits,
-        faculty: faculty,
       },
       section: {
         id: row.sectionId,

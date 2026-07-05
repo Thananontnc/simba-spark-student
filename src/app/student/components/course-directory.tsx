@@ -28,7 +28,7 @@ export default function CourseDirectory({ data }: Props) {
       return (
         course.courseName.toLowerCase().includes(q) ||
         course.courseCode.toLowerCase().includes(q) ||
-        course.faculty.toLowerCase().includes(q) ||
+        (course.faculty?.toLowerCase() || '').includes(q) ||
         section.sectionNumber.toLowerCase().includes(q)
       );
     });
@@ -159,12 +159,14 @@ function CourseCard({
             >
               {c.courseCode}
             </span>
-            <span
-              className="inline-block px-2 py-0.5 rounded-md text-[10px] font-medium"
-              style={{ background: 'var(--subtle)', color: 'var(--tx-2)', border: '1px solid var(--border)' }}
-            >
-              {c.faculty}
-            </span>
+            {c.faculty && (
+              <span
+                className="inline-block px-2 py-0.5 rounded-md text-[10px] font-medium"
+                style={{ background: 'var(--subtle)', color: 'var(--tx-2)', border: '1px solid var(--border)' }}
+              >
+                {c.faculty}
+              </span>
+            )}
           </div>
           <h3 className="text-sm font-semibold mt-1.5 truncate" style={{ color: 'var(--tx)' }}>
             {c.courseName}
