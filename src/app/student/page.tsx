@@ -2,7 +2,6 @@ import TopBanner from './components/top-banner';
 import TimetableGrid from './components/timetable-grid';
 import CourseDirectory from './components/course-directory';
 import RightPanel from './components/right-panel';
-import ProfileCard from './components/profile-card';
 import { mockDashboardData } from '@/lib/mock-data';
 
 export const dynamic = 'force-dynamic'; // dashboard shows live-ish data, never build-time frozen
@@ -34,11 +33,6 @@ export default function StudentPage() {
         {/* #directory anchor — enrolled courses */}
         <div id="directory" className="scroll-mt-20">
           <CourseDirectory data={data} />
-        </div>
-
-        {/* #profile anchor — student profile / Microsoft identity */}
-        <div id="profile" className="scroll-mt-20">
-          <ProfileCard data={data} />
         </div>
       </div>
 

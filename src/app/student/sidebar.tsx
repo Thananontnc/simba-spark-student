@@ -20,13 +20,6 @@ const NAV_GROUPS: { heading: string; items: { key: string; label: string; href: 
       { key: 'directory', label: 'Course Directory', href: '#directory', icon: <IconClass /> },
     ],
   },
-  {
-    heading: 'Account',
-    items: [
-      { key: 'notifications', label: 'Notifications', href: '#notifications', icon: <IconBell /> },
-      { key: 'profile', label: 'My Profile', href: '#profile', icon: <IconUser /> },
-    ],
-  },
 ];
 
 type Props = { data: StudentDashboardData; signOutAction: () => Promise<void> };
@@ -218,7 +211,7 @@ export default function StudentSidebar({ data, signOutAction }: Props) {
       <div className="px-3 py-3" style={{ borderTop: '1px solid var(--border)' }}>
         <form action={signOutAction}>
           <button type="submit" className="sidebar-signout">
-            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
               <polyline points="16 17 21 12 16 7" />
               <line x1="21" y1="12" x2="9" y2="12" />

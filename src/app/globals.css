@@ -43,7 +43,7 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter), var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -91,17 +91,29 @@ html {
 .sidebar-signout {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
+  gap: 12px;
+  padding: 10px 14px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 15px;
   width: 100%;
-  color: rgba(255,255,255,0.35);
-  transition: background 0.1s, color 0.1s;
+  color: var(--tx-2);
+  transition: background 0.15s, color 0.15s;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-weight: 400;
 }
 .sidebar-signout:hover {
-  background: rgba(255,255,255,0.05);
-  color: #f87171;
+  background: var(--subtle);
+  color: var(--tx);
+}
+.sidebar-signout svg {
+  color: var(--tx-3);
+  transition: color 0.15s;
+}
+.sidebar-signout:hover svg {
+  color: var(--tx);
 }
 
 /* Premium UI Helpers */
