@@ -31,7 +31,20 @@ export default function TimetableGrid({ data }: Props) {
   const { currentBlock, enrolledCourses } = data;
   const [weekIdx, setWeekIdx] = useState(0);
   const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [isSwitching, setIsSwitching] = useState(false);
   const [selectedDayIso, setSelectedDayIso] = useState<string | null>(null);
+
+  const handleCardToggle = (id: number) => {
+    setExpandedId((prev) => {
+      if (prev === id) {
+        setIsSwitching(false);
+        return null;
+      } else {
+        setIsSwitching(prev !== null);
+        return id;
+      }
+    });
+  };
 
   const blockDays = useMemo(
     () => (currentBlock ? weekdaysInRange(currentBlock.startDate, currentBlock.endDate) : []),
@@ -219,9 +232,10 @@ export default function TimetableGrid({ data }: Props) {
                       shade={shadeForTime(overlappingBooking.startTime)}
                       span={span}
                       isExpanded={expandedId === overlappingBooking.id}
+                      noTransition={isSwitching}
                       isToday={isToday}
                       inSession={inSession}
-                      onToggle={() => setExpandedId(expandedId === overlappingBooking.id ? null : overlappingBooking.id)}
+                      onToggle={() => handleCardToggle(overlappingBooking.id)}
                       isDimmed={isDimmed}
                       gridCol={gridCol}
                       gridRow={gridRow}
@@ -353,6 +367,7 @@ function TimetableCard({
   shade,
   span,
   isExpanded,
+  noTransition,
   isToday,
   inSession,
   onToggle,
@@ -365,6 +380,7 @@ function TimetableCard({
   shade: { bg: string; text: string };
   span: number;
   isExpanded: boolean;
+  noTransition: boolean;
   isToday: boolean;
   inSession: boolean;
   onToggle: () => void;
@@ -443,6 +459,7 @@ function TimetableCard({
             maxHeight: isExpanded ? 120 : 0,
             opacity: isExpanded ? 1 : 0,
             marginTop: isExpanded ? 8 : 0,
+            ...(noTransition ? { transition: 'none' } : {}),
           }}
         >
           <div className="pt-2 space-y-1.5" style={{ borderTop: '1px solid rgba(255,255,255,0.3)' }}>
